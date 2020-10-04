@@ -4,7 +4,7 @@ public:
 	sf::Texture textureTile;
 	// possible textures
 	vector<string> stages = 
-	{"pieces/2.png","pieces/4.png","pieces/16.png","pieces/32.png",
+	{"pieces/2.png","pieces/4.png","pieces/8.png","pieces/16.png","pieces/32.png",
      "pieces/64.png","pieces/128.png","pieces/256.png","pieces/512.png",
      "pieces/1024.png","pieces/2048.png","pieces/4096.png","pieces/8192.png"};
 	// indicated the current stage of the tile
