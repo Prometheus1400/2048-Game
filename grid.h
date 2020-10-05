@@ -7,6 +7,11 @@ public:
 	int tileSize; // for passing to new Tile objects
 	int tileStartStage; //for passing to new Tile objects
 
+	bool canLeft  = true;
+	bool canRight = true;
+	bool canUp    = true;
+	bool canDown  = true;
+
 	// methods
 	// constructor initializes arguments
 	// calls the setUp method
@@ -22,6 +27,11 @@ public:
 	void right();
 	void up();
 	void down();
+	// checks for game over
+	bool gameOver();
+	// resets gameOver conditions
+	void resetConditions();
+	void resetGrid();
 };
 
 void Grid::setUp() {
@@ -100,7 +110,10 @@ void Grid::left() {
 		}
 	}
 	if (count) {
+		resetConditions();
 		spawnNew();
+	} else {
+		canLeft = false;
 	}
 }
 
@@ -133,7 +146,10 @@ void Grid::right() {
 		}
 	}
 	if (count) {
+		resetConditions();
 		spawnNew();
+	} else {
+		canRight = false;
 	}
 }
 
@@ -166,7 +182,10 @@ void Grid::up() {
 		}
 	}
 	if (count) {
+		resetConditions();
 		spawnNew();
+	} else {
+		canUp = false;
 	}
 }
 
@@ -199,6 +218,39 @@ void Grid::down() {
 		}
 	}
 	if (count) {
+		resetConditions();
 		spawnNew();
+	} else {
+		canDown = false;
 	}
+}
+
+bool Grid::gameOver() {
+	if (!canLeft && !canRight && !canUp && !canDown) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Grid::resetConditions() {
+		canLeft  = true;
+		canRight = true;
+		canUp    = true;
+		canDown  = true;
+	}
+
+void Grid::resetGrid() {
+	for (int i = 0; i < Length; i++) {
+		for (int k = 0; k < Length; k++) {
+			if (tiles[i][k] != nullptr) {
+				delete tiles[i][k];
+				tiles[i][k] = nullptr;
+			}
+		}
+	}
+	resetConditions();
+	spawnNew();
+	spawnNew();
+	spawnNew();
 }

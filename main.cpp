@@ -21,7 +21,7 @@ int main() {
     const int START_STAGE = 0; // starting point of tiles, 0 recommended
 
     int sizeScreen = 800; // must be divisible by dimension
-    double scale   = 2; // reccomended to be 1 <--> 2
+    double scale   = 1.2; // reccomended to be 1 <--> 2
     sizeScreen *= scale;  // scales the size
     if (sizeScreen % 4 != 0) {
         cerr << "Unsupported resolution" << endl;
@@ -45,18 +45,27 @@ int main() {
 
     // sets up the score object
     sf::Font font;
-    font.loadFromFile("ArialCE.ttf");
+    font.loadFromFile("to_load/ArialCE.ttf");
     sf::Text score;
     score.setFont(font);
     score.setFillColor(sf::Color(250, 245, 225, 255));
     score.setString("Score:");
     score.setCharacterSize(50*scale);
     score.setPosition(tileSize*DIMENSION+tileSize/4, tileSize/4);
+
+    sf::Texture resetTexture;
+    resetTexture.loadFromFile("to_load/reset2.png");
+    sf::Sprite button;
+    button.setTexture(resetTexture);
+    button.setScale(1*scale,1*scale);
+    button.setPosition(tileSize*DIMENSION+tileSize/4, tileSize*DIMENSION - tileSize/2);
     
     // updates score initially
     int numMoves = -1;
+    bool gameOver = false;
     updateScore(&numMoves, &score);
     while (window.isOpen()) {
+        gameOver = grid.gameOver();
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -79,6 +88,17 @@ int main() {
                 grid.down();
                 updateScore(&numMoves, &score);
             }
+            if ((sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
+                sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::FloatRect bounds = button.getGlobalBounds();
+                // hit test
+                if (bounds.contains(mouse)) {
+                    numMoves = -1;
+                    updateScore(&numMoves, &score);
+                    grid.resetGrid();
+
+                }
+            }
         }
         // clears the screen for clean draw
         window.clear(sf::Color(82, 86, 87, 255));
@@ -92,6 +112,7 @@ int main() {
         }
         window.draw(scoreRectangle);
         window.draw(score);
+        window.draw(button);
         window.display();
     }
     return 0;
