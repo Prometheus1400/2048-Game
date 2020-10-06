@@ -13,7 +13,6 @@ using std::vector, std::string, std::cerr, std::cout, std::endl;
 
 // updates score, only called on keypress
 void updateScore(int *moves, sf::Text *score);
-
 int main() {
     srand(time(0));
     // setting up grid
@@ -55,6 +54,7 @@ int main() {
 
     sf::Texture resetTexture;
     resetTexture.loadFromFile("to_load/reset2.png");
+    resetTexture.setSmooth(true);
     sf::Sprite button;
     button.setTexture(resetTexture);
     button.setScale(1*scale,1*scale);
@@ -68,25 +68,30 @@ int main() {
         gameOver = grid.gameOver();
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+            if (event.type == sf::Event::Closed || gameOver) {
                 window.close();
                 cout << "Game Over" << endl;
+                cout << "Score: " << numMoves << endl;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                grid.left();
-                updateScore(&numMoves, &score);
+                if (grid.left()) {
+                    updateScore(&numMoves, &score);
+                }
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                grid.right();
-                updateScore(&numMoves, &score);
+                if (grid.right()) {
+                    updateScore(&numMoves, &score);
+                }
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                grid.up();
-                updateScore(&numMoves, &score);
+                if (grid.up()) {
+                    updateScore(&numMoves, &score);
+                }
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                grid.down();
-                updateScore(&numMoves, &score);
+                if (grid.down()) {
+                    updateScore(&numMoves, &score);
+                }
             }
             if ((sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));

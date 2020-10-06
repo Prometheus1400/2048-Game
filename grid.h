@@ -23,10 +23,10 @@ public:
 	// for debugging purposes only!
 	void show();
 	// moves the tiles
-	void left();
-	void right();
-	void up();
-	void down();
+	bool left();
+	bool right();
+	bool up();
+	bool down();
 	// checks for game over
 	bool gameOver();
 	// resets gameOver conditions
@@ -58,8 +58,8 @@ void Grid::spawnNew() {
 	int x;
 	int y;
 	while (true) {
-		x = rand() % 4;
-		y = rand() % 4;
+		x = rand() % Length;
+		y = rand() % Length;
 		if (tiles[x][y] == nullptr) {
 			tiles[x][y] = new Tile(tileSize,tileStartStage);
 			tiles[x][y]->setPosition(y*tileSize,x*tileSize);
@@ -81,7 +81,7 @@ void Grid::show() {
 	}
 }
 
-void Grid::left() {
+bool Grid::left() {
 	bool done = false;
 	int count = 0;
 	while(!done) {
@@ -112,12 +112,14 @@ void Grid::left() {
 	if (count) {
 		resetConditions();
 		spawnNew();
+		return true;
 	} else {
 		canLeft = false;
+		return false;
 	}
 }
 
-void Grid::right() {
+bool Grid::right() {
 	bool done = false;
 	int count = 0;
 	while(!done) {
@@ -148,12 +150,14 @@ void Grid::right() {
 	if (count) {
 		resetConditions();
 		spawnNew();
+		return true;
 	} else {
 		canRight = false;
+		return false;
 	}
 }
 
-void Grid::up() {
+bool Grid::up() {
 	bool done = false;
 	int count = 0;
 	while(!done) {
@@ -184,12 +188,14 @@ void Grid::up() {
 	if (count) {
 		resetConditions();
 		spawnNew();
+		return true;
 	} else {
 		canUp = false;
+		return false;
 	}
 }
 
-void Grid::down() {
+bool Grid::down() {
 	bool done = false;
 	int count = 0;
 	while(!done) {
@@ -220,8 +226,10 @@ void Grid::down() {
 	if (count) {
 		resetConditions();
 		spawnNew();
+		return true;
 	} else {
 		canDown = false;
+		return false;
 	}
 }
 
